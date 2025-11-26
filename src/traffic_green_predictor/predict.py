@@ -3,13 +3,6 @@ from traffic_green_predictor.model import TrafficModel
 import numpy as np
 
 
-data_maps = {
-    "K1": "data/4505_k1.csv",
-    "K2": "data/4505_k2.csv",
-    "K3": "data/4505_k3.csv",
-    "K4": "data/4505_k4.csv"
-}
-
 def predict_one(signal_name,hour, minute, dow):
     model = TrafficModel()
     model.load_state_dict(torch.load(f"models/model_{signal_name}.pth"))
@@ -19,9 +12,18 @@ def predict_one(signal_name,hour, minute, dow):
     with torch.no_grad():
         pred = model(x).numpy().flatten()
 
+    print(f"Raw predictions: {pred}...")  # print first 10
     return (pred > 0.5).astype(int)
 
 if __name__ == "__main__":
-    result = predict_one("K1",12, 37, 0)
-    print(result)
+    signal_num = int(input("Enter signal number (1-4): "))
+    signal_name = f"K{signal_num}"
+    hour = int(input("Enter hour (0-23): "))
+    minute = int(input("Enter minute (0-59): "))
+    dow = 0  # Assume Monday, or could ask for input
+
+    result = predict_one(signal_name, hour, minute, dow)
+    print("Prediction:", result)
     print("Green seconds:", np.where(result == 1)[0])
+    if np.sum(result) == 0:
+        print("No green predicted for this time. Try a different hour/minute.")

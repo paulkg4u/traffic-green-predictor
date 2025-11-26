@@ -24,23 +24,23 @@ A PyTorch-based machine learning project to predict traffic light green periods 
 
 ### Training
 
-Train the model for a specific signal:
+Train the models for all signals:
 
 ```bash
 uv run python src/traffic_green_predictor/train.py
 ```
 
-This trains the model on data for signal K1 and saves it to `models/model_K1.pth`.
+This trains separate models for signals K1, K2, K3, and K4, saving them to `models/model_K1.pth`, etc.
 
 ### Prediction
 
-Predict green periods for a specific time:
+Predict green periods interactively:
 
 ```bash
 uv run python src/traffic_green_predictor/predict.py
 ```
 
-This loads the trained model and predicts for hour=14, minute=37, day_of_week=0, outputting the binary array and green seconds.
+This prompts for signal number (1-4), hour (0-23), and minute (0-59), then loads the corresponding trained model and outputs the prediction.
 
 ## Model Architecture
 

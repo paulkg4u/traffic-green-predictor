@@ -7,14 +7,13 @@ import torch.nn as nn
 
 data_maps = {
     "K1": "data/4505_k1.csv",
-    "K2": "data/4505_k2.csv",
+    "K2": "data/8705_k2.csv",
     "K3": "data/4505_k3.csv",
-    "K4": "data/4505_k4.csv"
+    "K4": "data/8705_k4.csv"
 }
 
 def train(signal_name):
     dataset = TrafficDataset(data_maps[signal_name])
-    print(dataset)
     loader = DataLoader(dataset, batch_size=32, shuffle=True)
 
     model = TrafficModel()
@@ -37,4 +36,6 @@ def train(signal_name):
     print(f"Model saved to {file_name}")
 
 if __name__ == "__main__":
-    train("K1")
+    for signal in ["K1", "K2", "K3", "K4"]:
+        print(f"Training model for {signal}")
+        train(signal)
