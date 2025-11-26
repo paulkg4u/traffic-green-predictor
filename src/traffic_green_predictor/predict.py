@@ -2,6 +2,13 @@ import torch
 from traffic_green_predictor.model import TrafficModel
 import numpy as np
 
+# Thresholds for each signal based on their probability distributions
+thresholds = {
+    "K1": 0.4,
+    "K2": 0.3,
+    "K3": 0.3,
+    "K4": 0.3
+}
 
 def predict_one(signal_name,hour, minute, dow):
     model = TrafficModel()
@@ -11,9 +18,9 @@ def predict_one(signal_name,hour, minute, dow):
     x = torch.tensor([[hour, minute, dow]], dtype=torch.float32)
     with torch.no_grad():
         pred = model(x).numpy().flatten()
-
-    print(f"Raw predictions: {pred}...")  # print first 10
-    return (pred > 0.5).astype(int)
+    print(f"Raw predictions for {signal_name}: {pred}")
+    threshold = thresholds[signal_name]
+    return (pred > threshold).astype(int)
 
 if __name__ == "__main__":
     signal_num = int(input("Enter signal number (1-4): "))
